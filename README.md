@@ -1,78 +1,71 @@
-# 🎵 vmp3 — Video to MP3 Converter (Microservice Architecture)
+<h1 align="center">🎵 vmp3 — Video to MP3 Converter</h1>
 
-`vmp3` is a distributed system that converts video files into MP3 audio using **FFmpeg**.  
-It is designed with a **microservice architecture** for scalability and reliability, leveraging:
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.10+-blue?logo=python&logoColor=white" />
+  <img src="https://img.shields.io/badge/FastAPI-Backend-009688?logo=fastapi&logoColor=white" />
+  <img src="https://img.shields.io/badge/Docker-Containerization-2496ED?logo=docker&logoColor=white" />
+</p>
 
-- **RabbitMQ** → For asynchronous job queueing and task distribution.
-- **Redis** → For caching and fast data access.
-- **Amazon S3** → For secure and scalable storage of uploaded videos and generated MP3 files.
-- **FFmpeg** → For efficient video-to-audio conversion.
+<p align="center">
+  <b>Microservice-based video to mp3 converter built with FFmpeg</b><br/>
+  Leverages <b>RabbitMQ</b>, <b>Redis</b>, and <b>Amazon S3</b> for distributed processing and storage.
+</p>
 
 ---
 
 ## 🚀 Features
-
-- Upload videos and convert them into high-quality MP3 files.
-- Scalable job processing using **RabbitMQ workers**.
-- Caching layer with **Redis** for faster metadata and job lookups.
-- File storage and retrieval from **Amazon S3**.
-- Modular **microservices** that can be scaled independently.
+- 🎥 Upload video and get high-quality **MP3** output  
+- 📦 Scalable microservice architecture  
+- 📨 Asynchronous processing with **RabbitMQ**  
+- ⚡ Fast lookups with **Redis**  
+- ☁️ Store and retrieve files from **Amazon S3**  
+- 🔄 Conversion handled by **FFmpeg** workers  
+- 🐳 Fully containerized with **Docker**  
 
 ---
 
 ## 🛠️ Architecture
 
-The system consists of **4 microservices**:
+<p align="center">
+  <img src="https://img.shields.io/badge/RabbitMQ-Message%20Broker-FF6600?logo=rabbitmq&logoColor=white" />
+  <img src="https://img.shields.io/badge/Redis-Cache-C00000?logo=redis&logoColor=white" />
+  <img src="https://img.shields.io/badge/Amazon%20S3-Storage-569A31?logo=amazonaws&logoColor=white" />
+  <img src="https://img.shields.io/badge/FFmpeg-Media%20Tool-007808?logo=ffmpeg&logoColor=white" />
+</p>
 
-1. **Upload Service**  
-   - Handles file uploads from clients.  
-   - Stores video files in **Amazon S3**.  
-   - Publishes conversion tasks to **RabbitMQ**.
+The system is composed of **4 microservices**:
 
-2. **Conversion Service**  
-   - Consumes video conversion tasks from **RabbitMQ**.  
-   - Uses **FFmpeg** to convert videos into MP3 format.  
-   - Uploads the converted MP3 back to **Amazon S3**.
+1. **📤 Upload Service**  
+   - Accepts video uploads  
+   - Stores them in **S3**  
+   - Publishes conversion jobs to **RabbitMQ**
 
-3. **Metadata Service**  
-   - Stores and retrieves job status, file metadata, and conversion progress.  
-   - Uses **Redis** for quick lookups and caching.
+2. **🎶 Conversion Service**  
+   - Consumes jobs from **RabbitMQ**  
+   - Converts videos to MP3 using **FFmpeg**  
+   - Saves results to **S3**
 
-4. **API Gateway / Download Service**  
-   - Provides a unified API for clients.  
-   - Handles job creation, status queries, and MP3 download links.  
-   - Connects all services together.
+3. **📊 Metadata Service**  
+   - Tracks job status, metadata, and progress  
+   - Uses **Redis** for fast lookups
 
----
-
-## 📦 Tech Stack
-
-- **Backend:** Python (FastAPI / Flask)  
-- **Message Broker:** RabbitMQ  
-- **Cache/Store:** Redis  
-- **File Storage:** Amazon S3  
-- **Media Processing:** FFmpeg  
-- **Containerization:** Docker & Docker Compose  
+4. **🌐 API Gateway / Download Service**  
+   - Provides REST API endpoints  
+   - Clients can check job status & download MP3s  
 
 ---
 
-## 🔧 How It Works
+## ⚡ System Workflow
 
-1. Client uploads a video via the **Upload Service**.  
-2. Upload service stores the video in **S3** and sends a conversion task to **RabbitMQ**.  
-3. **Conversion Service** picks the task, processes it with **FFmpeg**, and stores the MP3 back in **S3**.  
-4. **Metadata Service** updates job status in **Redis** for fast lookups.  
-5. Client queries the **API Gateway** to check conversion status or download the final MP3.
-
----
-
-## 📂 Repository Structure
-
-Each microservice is maintained as an independent repository:
-
-- [Upload Service](https://github.com/your-username/vmp3-upload-service)  
-- [Conversion Service](https://github.com/your-username/vmp3-conversion-service)  
-- [Metadata Service](https://github.com/your-username/vmp3-metadata-service)  
-- [API Gateway / Download Service](https://github.com/your-username/vmp3-api-gateway)  
-
----
+```mermaid
+flowchart LR
+    A[Client Uploads Video] -->|POST /upload| B[Upload Service]
+    B -->|Stores Video| S3[(Amazon S3)]
+    B -->|Publish Job| RQ[(RabbitMQ)]
+    RQ --> C[Conversion Service]
+    C -->|Convert with FFmpeg| MP3[MP3 File]
+    C -->|Store MP3| S3
+    C -->|Update Status| R[Redis]
+    A -->|Check Status / Download| D[API Gateway]
+    D --> R
+    D --> S3
