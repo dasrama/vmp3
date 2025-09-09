@@ -8,19 +8,19 @@
 
 <p align="center">
   <b>Microservice-based video to mp3 converter built with FFmpeg</b><br/>
-  Leverages <b>RabbitMQ</b>, <b>Redis</b>, and <b>Amazon S3</b> for distributed processing and storage.
+  Leverages <b>RabbitMQ</b>, <b>Redis</b>, <b>Amazon S3</b>, and <b>Docker</b> for scalable processing.
 </p>
 
 ---
 
 ## 🚀 Features
-- 🎥 Upload video and get high-quality **MP3** output  
-- 📦 Scalable microservice architecture  
-- 📨 Asynchronous processing with **RabbitMQ**  
-- ⚡ Fast lookups with **Redis**  
-- ☁️ Store and retrieve files from **Amazon S3**  
-- 🔄 Conversion handled by **FFmpeg** workers  
-- 🐳 Fully containerized with **Docker**  
+- 🔑 **User Authentication** for secure access  
+- 🌐 **API Gateway** as a single entry point for clients  
+- 🎶 **Video → MP3 Conversion** powered by **FFmpeg**  
+- 🔔 **Notifications** on job completion  
+- 📨 **Asynchronous processing** with **RabbitMQ**  
+- ☁️ File storage on **Amazon S3**  
+- ⚡ **Redis** for caching & fast job lookups  
 
 ---
 
@@ -33,39 +33,24 @@
   <img src="https://img.shields.io/badge/FFmpeg-Media%20Tool-007808?logo=ffmpeg&logoColor=white" />
 </p>
 
-The system is composed of **4 microservices**:
+The system is composed of **4 core microservices** + **RabbitMQ** backbone:
 
-1. **📤 Upload Service**  
-   - Accepts video uploads  
-   - Stores them in **S3**  
-   - Publishes conversion jobs to **RabbitMQ**
+1. **🔑 User Auth Service**  
+   - Handles user registration, login, and authentication  
+   - Issues tokens for secure API access  
 
-2. **🎶 Conversion Service**  
+2. **🌐 API Gateway**  
+   - Entry point for all client requests  
+   - Routes requests to appropriate microservices  
+   - Applies authentication & authorization  
+
+3. **🎶 Conversion Service**  
    - Consumes jobs from **RabbitMQ**  
    - Converts videos to MP3 using **FFmpeg**  
-   - Saves results to **S3**
+   - Uploads output files to **Amazon S3**  
 
-3. **📊 Metadata Service**  
-   - Tracks job status, metadata, and progress  
-   - Uses **Redis** for fast lookups
-
-4. **🌐 API Gateway / Download Service**  
-   - Provides REST API endpoints  
-   - Clients can check job status & download MP3s  
+4. **🔔 Notification Service**  
+   - Sends notifications (e.g., email, webhook, or push) when jobs finish  
+   - Subscribes to **RabbitMQ** events  
 
 ---
-
-## ⚡ System Workflow
-
-```mermaid
-flowchart LR
-    A[Client Uploads Video] -->|POST /upload| B[Upload Service]
-    B -->|Stores Video| S3[(Amazon S3)]
-    B -->|Publish Job| RQ[(RabbitMQ)]
-    RQ --> C[Conversion Service]
-    C -->|Convert with FFmpeg| MP3[MP3 File]
-    C -->|Store MP3| S3
-    C -->|Update Status| R[Redis]
-    A -->|Check Status / Download| D[API Gateway]
-    D --> R
-    D --> S3
