@@ -1,4 +1,4 @@
-<h1 align="center">🎵 vmp3 — Video to MP3 Converter</h1>
+<h1 align="center">🎵✨ vmp3 — Microservice Video ➡️ MP3 Converter</h1>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3.10+-blue?logo=python&logoColor=white" />
@@ -7,24 +7,24 @@
 </p>
 
 <p align="center">
-  <b>Microservice-based video to mp3 converter built with FFmpeg</b><br/>
-  Leverages <b>RabbitMQ</b>, <b>Redis</b>, <b>Amazon S3</b>, and <b>Docker</b> for scalable processing.
+  <b>Scalable video-to-audio conversion platform</b><br/>
+  Powered by <b>FFmpeg</b>, orchestrated with <b>RabbitMQ</b>, <b>Redis</b>, and <b>Amazon S3</b>.
 </p>
 
 ---
 
-## 🚀 Features
-- 🔑 **User Authentication** for secure access  
-- 🌐 **API Gateway** as a single entry point for clients  
-- 🎶 **Video → MP3 Conversion** powered by **FFmpeg**  
-- 🔔 **Notifications** on job completion  
-- 📨 **Asynchronous processing** with **RabbitMQ**  
-- ☁️ File storage on **Amazon S3**  
-- ⚡ **Redis** for caching & fast job lookups  
+## 🌟 Highlights
+- 🔑 Secure **User Authentication**  
+- 🌐 Central **API Gateway** for client access  
+- 🎶 Fast **Video → MP3 Conversion** with FFmpeg  
+- 🔔 Real-time **Notifications** after conversion  
+- 📨 **RabbitMQ** for async task distribution  
+- ☁️ **Amazon S3** for video & MP3 storage  
+- ⚡ **Redis** caching for speed  
 
 ---
 
-## 🛠️ Architecture
+## 🏗️ System Blueprint
 
 <p align="center">
   <img src="https://img.shields.io/badge/RabbitMQ-Message%20Broker-FF6600?logo=rabbitmq&logoColor=white" />
@@ -33,24 +33,22 @@
   <img src="https://img.shields.io/badge/FFmpeg-Media%20Tool-007808?logo=ffmpeg&logoColor=white" />
 </p>
 
-The system is composed of **4 core microservices** + **RabbitMQ** backbone:
+The ecosystem is composed of **4 microservices** + **RabbitMQ** backbone:
 
 1. **🔑 User Auth Service**  
-   - Handles user registration, login, and authentication  
-   - Issues tokens for secure API access  
+   Manages login, registration & token issuance  
+   **Repo:** [vmp3-auth-service](https://github.com/dasrama/vmp3-user-auth)  
 
 2. **🌐 API Gateway**  
-   - Entry point for all client requests  
-   - Routes requests to appropriate microservices  
-   - Applies authentication & authorization  
+   Routes requests, applies authentication, connects all services  
+   **Repo:** [vmp3-api-gateway](https://github.com/dasrama/vmp3-api-gateway)  
 
 3. **🎶 Conversion Service**  
-   - Consumes jobs from **RabbitMQ**  
-   - Converts videos to MP3 using **FFmpeg**  
-   - Uploads output files to **Amazon S3**  
+   Converts video → MP3 with FFmpeg, saves results to S3  
+   **Repo:** [vmp3-conversion-service](https://github.com/dasrama/vmp3-conversion-service)  
 
 4. **🔔 Notification Service**  
-   - Sends notifications (e.g., email, webhook, or push) when jobs finish  
-   - Subscribes to **RabbitMQ** events  
+   Sends notifications (email/webhook) after conversion is complete  
+   **Repo:** [vmp3-notification-service](https://github.com/dasrama/vmp3-notification-service)  
 
 ---
