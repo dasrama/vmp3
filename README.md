@@ -1,4 +1,4 @@
-<h1 align="center">🎵✨ vmp3 — Microservice Video ➡️ MP3 Converter</h1>
+<h1 align="center">✨ vmp3 — Microservice Video ➡ MP3 Converter</h1>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3.10+-blue?logo=python&logoColor=white" />
@@ -23,8 +23,6 @@
 - ⚡ **Redis** caching for speed  
 
 ---
-
-## 🏗️ System Blueprint
 
 <p align="center">
   <img src="https://img.shields.io/badge/RabbitMQ-Message%20Broker-FF6600?logo=rabbitmq&logoColor=white" />
